@@ -9,7 +9,7 @@ class ChatUser {
   /** Make chat user: store connection-device, room.
    *
    * @param send {function} callback to send message to this user
-   * @param room {Room} room user will be in
+   * @param roomName {String} room user will be in
    * */
 
   constructor(send, roomName) {

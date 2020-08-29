@@ -57,7 +57,7 @@ class Room {
 
   /** Send message to all members in a room.
    *
-   * @param data {string} message to send
+   * @param data {Object} message to send
    * */
 
   broadcast(data) {

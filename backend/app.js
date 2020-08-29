@@ -1,4 +1,4 @@
-/** app for groupchat */
+/** app for group chat */
 
 const express = require("express");
 const app = express();
@@ -10,7 +10,7 @@ app.use(express.static("static/"));
 /** Handle websocket chat */
 
 // allow for app.ws routes for websocket routes
-const wsExpress = require("express-ws")(app);
+require("express-ws")(app);
 
 const ChatUser = require("./ChatUser");
 
@@ -23,7 +23,7 @@ const ChatUser = require("./ChatUser");
  * The `ws.send` method is how we'll send messages back to that socket.
  */
 
-app.ws("/chat/:roomName", function (ws, req, next) {
+app.ws("/chat/:roomName", function (ws, req) {
   try {
     const user = new ChatUser(
         ws.send.bind(ws), // fn to call to message this user
@@ -59,7 +59,7 @@ app.ws("/chat/:roomName", function (ws, req, next) {
  *
  * */
 
-app.get("/:roomName", function (req, res, next) {
+app.get("/:roomName", function (req, res) {
   res.sendFile(`${__dirname}/chat.html`);
 });
 
