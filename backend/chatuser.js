@@ -33,6 +33,17 @@ class ChatUser {
     }
   }
 
+  /** Handle leave: announce join. */
+
+  handleLeave() {
+    this.room.leave(this);
+    this.room.broadcast({
+      type: "note",
+      name: this.name,
+      text: `left "${this.room.name}".`,
+    });
+  }
+
   /** Handle joining: add to room members, announce join.
    *
    * @param name {string} name to use in room
@@ -43,7 +54,8 @@ class ChatUser {
     this.room.join(this);
     this.room.broadcast({
       type: "note",
-      text: `${this.name} joined "${this.room.name}".`,
+      name: this.name,
+      text: `joined "${this.room.name}".`,
     });
   }
 
@@ -74,6 +86,7 @@ class ChatUser {
     let msg = JSON.parse(jsonData);
 
     if (msg.type === "join") this.handleJoin(msg.name);
+    else if (msg.type === "leave") this.handleLeave();
     else if (msg.type === "chat") this.handleChat(msg.text);
     else throw new Error(`bad message: ${msg.type}`);
   }

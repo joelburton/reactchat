@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef } from "react";
 
 /** Handle backend communication:
  *
@@ -11,43 +11,43 @@ import { useEffect, useState } from "react";
 const BASE_URL = process.env.REACT_APP_BASE_URL || "ws://localhost:3333";
 
 function useSocket(room, name, addMessage) {
-  const [socket, setSocket] = useState(null);
-  const [connecting, setConnecting] = useState(true)
+  const socket = useRef();
+  // const [connected, setConnected] = useState(false)
+
+  console.log("room=", room);
 
   /** joinRoom: creates new websocket, sends leave message on cleanup */
   useEffect(function joinRoom() {
-    if (!room || !connecting) return;
-
-    setSocket(new WebSocket(`${BASE_URL}/chat/${room}`));
-    setConnecting(false);
+    console.log("joinroom", room,  socket.current)
+    console.log(room)
+      socket.current = new WebSocket(`${BASE_URL}/chat/${room}`);
 
     return function leaveRoom() {
-      if (!socket || socket.readyState === 0) return;
-      console.log(room, socket);
-      socket.send(JSON.stringify({type: "note", text: `left ${room}`}));
+      socket.current.send(JSON.stringify({ type: "leave"  }));
+      socket.current.close();
     };
-  }, [room, connecting, socket]);
+  }, [room]);
 
   /** newSocket: attaches listeners to socket. */
   useEffect(function newSocket() {
-    if (!socket) return;
+    if (!socket.current) return;
 
     // handles socket opening by sending message to join room
-    socket.onopen = function () {
-      socket.send(JSON.stringify({type: "join", name }))
+    socket.current.onopen = function () {
+      socket.current.send(JSON.stringify({type: "join", name }))
     };
 
     // handles reception of a message from the backend
-    socket.onmessage = function (evt) {
+    socket.current.onmessage = function (evt) {
       let newMessageFromBackend = JSON.parse(evt.data);
       console.info("new message", newMessageFromBackend);
       addMessage(newMessageFromBackend);
     };
-  }, [socket, addMessage, name])
+  }, [socket, addMessage, name, room])
 
   /** Deliver message to backend. */
   function deliver(text, type="chat") {
-    socket.send(JSON.stringify({ type, text }));
+    socket.current.send(JSON.stringify({ type, text }));
   }
 
   return deliver;
