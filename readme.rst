@@ -13,13 +13,12 @@ Running
 
 .. parsed-literal::
 
-  $ `cd backend`:cmd:
-  $ `npm install`:cmd:
-  $ `npm start`:cmd:
+  $ cd backend
+  $ npm install
+  $ npm start
 
 .. parsed-literal::
 
-  $ `cd frontend`:cmd:
-  $ `npm install`:cmd:
-  $ `npm start`:cmd:
-
+  $ cd frontend
+  $ npm install
+  $ npm start
