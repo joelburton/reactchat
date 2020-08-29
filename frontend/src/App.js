@@ -2,20 +2,22 @@ import React, { useState } from "react";
 import './App.css';
 import ChatApp from "./ChatApp.js";
 import "bootstrap/dist/css/bootstrap.css";
-import UsernameForm from "./UsernameForm";
+import NameForm from "./NameForm";
+
+/** Overall page: gathers a name then renders chat app. */
 
 function App() {
-  const [username, setUsername] = useState("");
+  const [name, setName] = useState("");
 
-  function acceptUsername({ username }) {
-    setUsername(username);
+  function acceptName({ name }) {
+    setName(name);
   }
 
   return (
     <div className="App container">
-      { !username
-      ? <UsernameForm handleSave={acceptUsername} />
-      : <ChatApp username={username} />}
+      { !name
+      ? <NameForm handleSave={acceptName} />
+      : <ChatApp name={name} />}
 
     </div>
   );

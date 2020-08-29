@@ -14,7 +14,6 @@ function MessageForm({ handleSave }) {
   /** Update form input. */
   function handleChange(evt) {
     const input = evt.target;
-    if (evt.target.value.length >= 80) return
     setFormData(formData => ({
       ...formData,
       [input.name]: input.value,
@@ -38,6 +37,7 @@ function MessageForm({ handleSave }) {
               onChange={handleChange}
               value={formData.message}
               aria-label="Message"
+              maxLength="80"
               autoFocus={true}
           />
         </div>

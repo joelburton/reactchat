@@ -1,13 +1,13 @@
-.UsernameForm {
+.NameForm {
   font-size: 200%;
 }
 
-.UsernameForm input {
+.NameForm input {
   font-size: 200%;
   box-shadow: none !important;
   border: none;
 }
 
-.UsernameForm input::placeholder {
+.NameForm input::placeholder {
   color: #eee;
 }

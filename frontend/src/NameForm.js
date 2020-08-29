@@ -1,21 +1,20 @@
 import React, { useState } from "react";
-import "./UsernameForm.css";
+import "./NameForm.css";
 
 /** Form for adding.
  *
  * Props:
  * - handleSave: function to call in parent.
  *
- * ChatApp -> UsernameForm
+ * ChatApp -> NameForm
  */
 
-function UsernameForm({ handleSave }) {
-  const [formData, setFormData] = useState({username: ""});
+function NameForm({ handleSave }) {
+  const [formData, setFormData] = useState({name: ""});
 
   /** Update form input. */
   function handleChange(evt) {
     const input = evt.target;
-    if (evt.target.value.length >= 10) return
     setFormData(formData => ({
       ...formData,
       [input.name]: input.value,
@@ -29,18 +28,19 @@ function UsernameForm({ handleSave }) {
   }
 
   return (
-      <form className="UsernameForm d-flex vh-100" onSubmit={handleSubmit}>
+      <form className="NameForm d-flex vh-100" onSubmit={handleSubmit}>
 
         <div className="form-group align-self-center">
           <p>What shall we call you?</p>
           <input
-              id="UsernameForm-username"
-              name="username"
+              id="NameForm-name"
+              name="name"
               className="form-control"
               placeholder="TacoCat"
               onChange={handleChange}
-              value={formData.username}
-              aria-label="Username"
+              value={formData.name}
+              aria-label="Name"
+              maxLength="10"
               autoFocus={true}
           />
         </div>
@@ -49,4 +49,4 @@ function UsernameForm({ handleSave }) {
   );
 }
 
-export default UsernameForm;
+export default NameForm;

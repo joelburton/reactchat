@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import MessageForm from "./MessageForm";
 import MessagesList from "./MessagesList";
 import RoomPicker from "./RoomPicker";
@@ -6,10 +6,10 @@ import useSocket from "./useSocket";
 
 /** App: manage messages & room; show UI. */
 
-function ChatApp({ username, rooms = ["Main", "Gossip", "Scandal"] }) {
+function ChatApp({ name, rooms = ["Main", "Gossip", "Scandal"] }) {
   const [room, setRoom] = useState(rooms[0]);
   const [messages, setMessages] = useState([]);
-  const deliver = useSocket(room, username, addMessage);
+  const [connected, error, dispatch] = useSocket(addMessage);
 
   /** Add a message from backend. */
   function addMessage(message) {
@@ -18,8 +18,21 @@ function ChatApp({ username, rooms = ["Main", "Gossip", "Scandal"] }) {
 
   /** Process new message user just entered in form. */
   function userEnteredMessage({ message }) {
-    deliver(message);
+    dispatch({type: "chat", text: message});
   }
+
+  /** joinRoom: join room, leave room on cleanup */
+  useEffect(function joinRoom() {
+    if (!connected) return;
+
+    dispatch({type: "join", name, room });
+
+    return function leaveRoom() {
+      dispatch({type: "leave"})
+    };
+  }, [connected, room, name, dispatch]);
+
+  if (error) return <b>Error: { error }</b>;
 
   return (
       <main className="vh-100 d-flex flex-column">
