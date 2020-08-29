@@ -9,15 +9,12 @@ class ChatUser {
   /** Make chat user: store connection-device, room.
    *
    * @param send {function} callback to send message to this user
-   * @param roomName {String} room user will be in
    * */
 
-  constructor(send, roomName) {
+  constructor(send) {
     this._send = send; // "send" function for this user
-    this.room = Room.get(roomName); // room user will be in
+    this.room = null; // room user will be in
     this.name = null; // becomes the username of the visitor
-
-    console.log(`created chat in ${this.room.name}`);
   }
 
   /** Send msgs to this client using underlying connection-send-function.
@@ -36,21 +33,23 @@ class ChatUser {
   /** Handle leave: announce join. */
 
   handleLeave() {
-    this.room.leave(this);
     this.room.broadcast({
       type: "note",
       name: this.name,
       text: `left "${this.room.name}".`,
     });
+    this.room.leave(this);
   }
 
   /** Handle joining: add to room members, announce join.
    *
    * @param name {string} name to use in room
+   * @param room {string} room user is joining
    * */
 
-  handleJoin(name) {
+  handleJoin(name, room) {
     this.name = name;
+    this.room = Room.get(room);
     this.room.join(this);
     this.room.broadcast({
       type: "note",
@@ -85,7 +84,7 @@ class ChatUser {
   handleMessage(jsonData) {
     let msg = JSON.parse(jsonData);
 
-    if (msg.type === "join") this.handleJoin(msg.name);
+    if (msg.type === "join") this.handleJoin(msg.name, msg.room);
     else if (msg.type === "leave") this.handleLeave();
     else if (msg.type === "chat") this.handleChat(msg.text);
     else throw new Error(`bad message: ${msg.type}`);
@@ -94,11 +93,13 @@ class ChatUser {
   /** Connection was closed: leave room, announce exit to others. */
 
   handleClose() {
-    this.room.leave(this);
-    this.room.broadcast({
-      type: "note",
-      text: `${this.name} left ${this.room.name}.`,
-    });
+    if (this.room) {
+      this.room.leave(this);
+      this.room.broadcast({
+        type: "note",
+        text: `${this.name} left ${this.room.name}.`,
+      });
+    }
   }
 }
 

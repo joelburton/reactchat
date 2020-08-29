@@ -6,7 +6,7 @@ function Message({type, text, name}) {
   function renderMessage() {
     switch (type) {
       case "chat": return <span><b>{name}</b>: {text}</span>
-      case "note": return <i>{text}</i>
+      case "note": return <i>{name} {text}</i>
       default: return text
     }
   }
