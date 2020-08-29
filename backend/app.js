@@ -12,7 +12,7 @@ app.use(express.static("static/"));
 // allow for app.ws routes for websocket routes
 require("express-ws")(app);
 
-const ChatUser = require("./ChatUser");
+const ChatUser = require("./chatuser");
 
 /** Handle a persistent connection to /chat/[roomName]
  *
