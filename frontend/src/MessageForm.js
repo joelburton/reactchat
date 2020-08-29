@@ -9,7 +9,7 @@ import React, { useState } from "react";
  */
 
 function MessageForm({ handleSave }) {
-  const [formData, setFormData] = useState({message: ""});
+  const [formData, setFormData] = useState({ message: "" });
 
   /** Update form input. */
   function handleChange(evt) {
@@ -23,8 +23,9 @@ function MessageForm({ handleSave }) {
   /** Call parent function and clear form. */
   function handleSubmit(evt) {
     evt.preventDefault();
+    if (!formData.message) return;
     handleSave(formData);
-    setFormData({message: ""})
+    setFormData({ message: "" });
   }
 
   return (
@@ -37,6 +38,7 @@ function MessageForm({ handleSave }) {
               onChange={handleChange}
               value={formData.message}
               aria-label="Message"
+              placeholder="What's on your mind?"
               maxLength="80"
               autoFocus={true}
           />
