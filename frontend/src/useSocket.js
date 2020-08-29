@@ -8,21 +8,25 @@ import { useEffect, useState } from "react";
  * - returns deliver function that parent can use to send to backend
  */
 
-const BASE_URL = process.env.REACT_APP_BASE_URL || "ws://localhost:3333/chat";
+const BASE_URL = process.env.REACT_APP_BASE_URL || "ws://localhost:3333";
 
 function useSocket(room, name, addMessage) {
   const [socket, setSocket] = useState(null);
+  const [connecting, setConnecting] = useState(true)
 
   /** joinRoom: creates new websocket, sends leave message on cleanup */
   useEffect(function joinRoom() {
-    if (!room) return;
+    if (!room || !connecting) return;
 
-    setSocket(new WebSocket(`${BASE_URL}/${room}`));
+    setSocket(new WebSocket(`${BASE_URL}/chat/${room}`));
+    setConnecting(false);
 
     return function leaveRoom() {
+      if (!socket || socket.readyState === 0) return;
+      console.log(room, socket);
       socket.send(JSON.stringify({type: "note", text: `left ${room}`}));
     };
-  }, [room, socket]);
+  }, [room, connecting, socket]);
 
   /** newSocket: attaches listeners to socket. */
   useEffect(function newSocket() {
