@@ -24,10 +24,11 @@ const ChatUser = require("./ChatUser");
  */
 
 app.ws("/chat/:roomName", function (ws, req) {
+  const { roomName } = req.params;
   try {
     const user = new ChatUser(
         ws.send.bind(ws), // fn to call to message this user
-        req.params.roomName, // name of room for user
+        roomName, // name of room for user
     );
 
     // register handlers for message-received, connection-closed

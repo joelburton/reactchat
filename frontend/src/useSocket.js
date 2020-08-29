@@ -29,7 +29,7 @@ function useSocket(room, name, addMessage) {
     if (!socket) return;
 
     // handles socket opening by sending message to join room
-    socket.onopen = function (evt) {
+    socket.onopen = function () {
       socket.send(JSON.stringify({type: "join", name }))
     };
 

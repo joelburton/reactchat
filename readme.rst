@@ -6,7 +6,7 @@ React Hooks Chat
 Demo
 ----
 
-`http://reactchat.surge.joelburton.com`_
+`Demo <http://reactchat.surge.joelburton.com>`_
 
 Running
 -------

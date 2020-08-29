@@ -85,6 +85,7 @@ function registerValidSW(swUrl, config) {
               console.log('Content is cached for offline use.');
 
               // Execute callback
+              // noinspection JSUnresolvedVariable
               if (config && config.onSuccess) {
                 config.onSuccess(registration);
               }
@@ -132,6 +133,7 @@ export function unregister() {
   if ('serviceWorker' in navigator) {
     navigator.serviceWorker.ready
       .then(registration => {
+        // noinspection JSIgnoredPromiseFromCall
         registration.unregister();
       })
       .catch(error => {
